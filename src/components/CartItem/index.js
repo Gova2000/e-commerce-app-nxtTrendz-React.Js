@@ -10,25 +10,23 @@ const CartItem = props => (
     {value => {
       const {
         removeCartItem,
-        decrementCartItemQuantity,
         incrementCartItemQuantity,
+        decrementCartItemQuantity,
       } = value
       const {cartItemDetails} = props
       const {id, title, brand, quantity, price, imageUrl} = cartItemDetails
       const onRemoveCartItem = () => {
         removeCartItem(id)
       }
+      // TODO: Update the functionality to increment and decrement quantity of the cart item
 
-      const onDecrementQuantity = () => {
-        if (quantity > 1) {
-          decrementCartItemQuantity(cartItemDetails)
-        }
-      }
-
-      const onIncrementQuantity = () => {
+      const Increment = () => {
         incrementCartItemQuantity(id)
       }
-      // TODO: Update the functionality to increment and decrement quantity of the cart item
+
+      const Decrement = () => {
+        decrementCartItemQuantity(cartItemDetails)
+      }
 
       return (
         <li className="cart-item">
@@ -41,40 +39,36 @@ const CartItem = props => (
             <div className="cart-quantity-container">
               <button
                 type="button"
-                onClick={onDecrementQuantity}
-                data-testid="minus"
-                aria-label="decrementButton"
                 className="quantity-controller-button"
+                onClick={Decrement}
+                data-testid="minus"
               >
                 <BsDashSquare color="#52606D" size={12} />
               </button>
               <p className="cart-quantity">{quantity}</p>
               <button
                 type="button"
-                onClick={onIncrementQuantity}
-                data-testid="plus"
-                aria-label="incrementButton"
                 className="quantity-controller-button"
+                onClick={Increment}
+                data-testid="plus"
               >
                 <BsPlusSquare color="#52606D" size={12} />
               </button>
             </div>
             <div className="total-price-remove-container">
-              <p className="cart-total-price">Rs {price * quantity}/-</p>
+              <p className="cart-total-price">Rs {quantity * price}/-</p>
               <button
                 className="remove-button"
-                data-testid="remove"
                 type="button"
                 onClick={onRemoveCartItem}
+                data-testid="remove"
               >
                 Remove
               </button>
             </div>
           </div>
           <button
-            aria-label="deleteButton"
             className="delete-button"
-            data-testid="remove"
             type="button"
             onClick={onRemoveCartItem}
           >
