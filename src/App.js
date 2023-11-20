@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import {Component} from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
 
@@ -17,53 +18,70 @@ class App extends Component {
     cartList: [],
   }
 
-  removeCartItem = id => {
+  //   TODO: Add your code for remove all cart items, increment cart item quantity, decrement cart item quantity, remove cart item
+
+  addCartItem = product => {
     const {cartList} = this.state
-    const updatedCartList = cartList.filter(
-      eachCartItem => eachCartItem.id !== id,
-    )
-    this.setState({cartList: updatedCartList})
+
+    const get = cartList.some(each => each.id === product.id)
+
+    if (cartList.length === 0 || get === false) {
+      this.setState(prevState => ({
+        cartList: [...prevState.cartList, product],
+      }))
+    } else {
+      cartList.map(each => {
+        if (each.id === product.id) {
+          if (each.quantity !== 0) {
+            each.quantity += 1
+          }
+        }
+        return each
+      })
+    }
+
+    // TODO: Update the code here to implement addCartItem
+  }
+
+  removeCartItem = data => {
+    const {cartList} = this.state
+
+    const filter = cartList.filter(each => each.id !== data)
+
+    this.setState({cartList: filter})
   }
 
   removeAllCartItems = () => {
     this.setState({cartList: []})
   }
-  //   TODO: Add your code for remove all cart items, increment cart item quantity, decrement cart item quantity, remove cart item
 
-  addCartItem = product => {
+  incrementCartItemQuantity = id => {
     const {cartList} = this.state
-    const existingCartItem = cartList.find(item => item.id === product.id)
 
-    const updateSameCartItem = cartList.map(item =>
-      item.id === product.id
-        ? {...item, quantity: item.quantity + product.quantity}
-        : item,
-    )
-
-    const updateNewCartItem = this.setState(prevState => ({
-      cartList: [...prevState.cartList, product],
-    }))
-
-    return existingCartItem
-      ? this.setState({cartList: updateSameCartItem})
-      : updateNewCartItem
-    //   TODO: Update the code here to implement addCartItem
+    const increment = cartList.map(each => {
+      if (each.id === id) {
+        if (each.quantity !== 0) {
+          each.quantity += 1
+        }
+      }
+      return each
+    })
+    this.setState({cartList: increment})
   }
 
-  incrementCartItemQuantity = (id, newQuantity) => {
-    this.setState(prevState => ({
-      cartList: prevState.cartList.map(item =>
-        item.id === id ? {...item, quantity: newQuantity} : item,
-      ),
-    }))
-  }
+  decrementCartItemQuantity = cartItem => {
+    const {cartList} = this.state
 
-  decrementCartItemQuantity = (id, newQuantity) => {
-    this.setState(prevState => ({
-      cartList: prevState.cartList.map(item =>
-        item.id === id ? {...item, quantity: newQuantity} : item,
-      ),
-    }))
+    const Dec = cartList.map(each => {
+      if (each.id === cartItem.id) {
+        if (each.quantity !== 1) {
+          each.quantity -= 1
+        }
+      }
+      return each
+    })
+
+    this.setState({cartList: Dec})
   }
 
   render() {
